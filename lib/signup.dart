@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:newproject/main.dart';
-import 'package:newproject/signup.dart';
 
-
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatelessWidget {
+  // const 제거
+  SignUpScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +23,7 @@ class LoginScreen extends StatelessWidget {
             child: const Padding(
               padding: EdgeInsets.only(top: 60.0, left: 22),
               child: Text(
-                'Life Style',
+                'Sign Up',
                 style: TextStyle(
                   fontSize: 30,
                   color: Colors.white,
@@ -54,7 +52,7 @@ class LoginScreen extends StatelessWidget {
                     const TextField(
                       decoration: InputDecoration(
                         suffixIcon: Icon(
-                          Icons.check,
+                          Icons.email,
                           color: Colors.grey,
                         ),
                         label: Text(
@@ -67,7 +65,22 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     const TextField(
-                      obscureText: true, // 비밀번호 텍스트 가리기
+                      decoration: InputDecoration(
+                        suffixIcon: Icon(
+                          Icons.person,
+                          color: Colors.grey,
+                        ),
+                        label: Text(
+                          'Username',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xffB81736),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const TextField(
+                      obscureText: true,
                       decoration: InputDecoration(
                         suffixIcon: Icon(
                           Icons.visibility_off,
@@ -82,28 +95,27 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    const Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        'Forgot Password?',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                          color: Color(0xff281537),
+                    const TextField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        suffixIcon: Icon(
+                          Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                        label: Text(
+                          'Confirm Password',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xffB81736),
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 70),
                     GestureDetector(
                       onTap: () {
-                        // 로그인 성공 시 캘린더 페이지로 전환
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CalendarPage(),
-                          ),
-                        );
+                        // 회원가입 완료 후, 로그인 화면으로 이동
+                        Navigator.pop(context);
                       },
                       child: Container(
                         height: 55,
@@ -119,7 +131,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                         child: const Center(
                           child: Text(
-                            'SIGN IN',
+                            'SIGN UP',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
@@ -129,40 +141,21 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 150),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          const Text(
-                            "Don't have an account?",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            ),
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: () {
+                        // 로그인 화면으로 이동
+                        Navigator.pop(context);
+                      },
+                      child: const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Already have an account? Sign In',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff281537),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              // SignUpScreen으로 이동
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SignUpScreen(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              "Sign up",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ],
