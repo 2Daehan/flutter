@@ -134,7 +134,7 @@ class _CalendarPageState extends State<CalendarPage> {
             child: IndexedStack(
               index: _selectedPageIndex,
               children: [
-                _buildChecklistPage(),
+                ChecklistPage(), // ChecklistPage 추가
                 _buildNutritionPage(),
                 StaticPage(),
                 _buildGoalPage(),
@@ -217,7 +217,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         ),
                         SizedBox(height: 5),
                         Text(
-                          "${["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][date.weekday - 1]}",
+                          "${["월", "화", "수", "목", "금", "토", "일"][date.weekday - 1]}",
                           style: TextStyle(fontSize: 12),
                         ),
                       ],
@@ -233,18 +233,6 @@ class _CalendarPageState extends State<CalendarPage> {
           onPressed: _nextWeek,
         ),
       ],
-    );
-  }
-
-  Widget _buildChecklistPage() {
-    List<String> checklist = _currentData['checklist'] ?? ['데이터 없음'];
-    return ListView.builder(
-      itemCount: checklist.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(checklist[index]),
-        );
-      },
     );
   }
 

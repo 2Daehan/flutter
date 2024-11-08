@@ -1,5 +1,3 @@
-// test
-// test
 import 'package:flutter/material.dart';
 
 class ChecklistPage extends StatefulWidget {
@@ -16,7 +14,6 @@ class _ChecklistPageState extends State<ChecklistPage> {
   ];
 
   final TextEditingController _taskController = TextEditingController();
-  bool _isAddTaskOpen = false;
 
   void _toggleTaskCompletion(int index) {
     setState(() {
@@ -29,9 +26,14 @@ class _ChecklistPageState extends State<ChecklistPage> {
       setState(() {
         _tasks.add(Task(name: _taskController.text));
         _taskController.clear();
-        _isAddTaskOpen = false;
       });
     }
+  }
+
+  void _deleteTask(int index) {
+    setState(() {
+      _tasks.removeAt(index);
+    });
   }
 
   @override
@@ -42,7 +44,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('체크리스트'),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
       ),
       body: Column(
         children: [
@@ -50,12 +52,25 @@ class _ChecklistPageState extends State<ChecklistPage> {
             child: ListView.builder(
               itemCount: _tasks.length,
               itemBuilder: (context, index) {
-                return CheckboxListTile(
-                  title: Text(_tasks[index].name),
-                  value: _tasks[index].isCompleted,
-                  onChanged: (bool? value) {
-                    _toggleTaskCompletion(index);
+                return Dismissible(
+                  key: UniqueKey(),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    color: Colors.red,
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Icon(Icons.delete, color: Colors.white),
+                  ),
+                  onDismissed: (direction) {
+                    _deleteTask(index);
                   },
+                  child: CheckboxListTile(
+                    title: Text(_tasks[index].name),
+                    value: _tasks[index].isCompleted,
+                    onChanged: (bool? value) {
+                      _toggleTaskCompletion(index);
+                    },
+                  ),
                 );
               },
             ),
@@ -64,40 +79,42 @@ class _ChecklistPageState extends State<ChecklistPage> {
           SizedBox(height: 8),
           ElevatedButton(
             onPressed: () {
-              setState(() {
-                _isAddTaskOpen = true;
-              });
+              _showAddTaskDialog();
             },
             child: Text("추가"),
           ),
-          if (_isAddTaskOpen) _buildAddTaskDialog(),
         ],
       ),
     );
   }
 
-  Widget _buildAddTaskDialog() {
-    return AlertDialog(
-      title: Text("새 체크리스트 항목 추가"),
-      content: TextField(
-        controller: _taskController,
-        decoration: InputDecoration(labelText: "할 일 입력"),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            _addTask();
-            Navigator.of(context).pop();
-          },
-          child: Text("추가"),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text("취소"),
-        ),
-      ],
+  void _showAddTaskDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("새 체크리스트 항목 추가"),
+          content: TextField(
+            controller: _taskController,
+            decoration: InputDecoration(labelText: "할 일 입력"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                _addTask();
+                Navigator.of(context).pop();
+              },
+              child: Text("추가"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("취소"),
+            ),
+          ],
+        );
+      },
     );
   }
 }
