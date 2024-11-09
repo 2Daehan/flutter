@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginScreen(), // 처음 화면을 로그인 화면으로 설정
+      home: CalendarPage(),
+      //home: LoginScreen(), // 처음 화면을 로그인 화면으로 설정
     );
   }
 }
@@ -135,7 +136,7 @@ class _CalendarPageState extends State<CalendarPage> {
               index: _selectedPageIndex,
               children: [
                 ChecklistPage(), // ChecklistPage 추가
-                _buildNutritionPage(),
+                NutritionPage(),  // NutritionPage 추가
                 StaticPage(),
                 _buildGoalPage(),
               ],
@@ -232,17 +233,6 @@ class _CalendarPageState extends State<CalendarPage> {
           icon: Icon(Icons.arrow_forward),
           onPressed: _nextWeek,
         ),
-      ],
-    );
-  }
-
-  Widget _buildNutritionPage() {
-    Map<String, int> nutrition = _currentData['nutrition'] ?? {'칼로리': 0, '단백질': 0};
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('칼로리: ${nutrition['칼로리']} kcal'),
-        Text('단백질: ${nutrition['단백질']} g'),
       ],
     );
   }

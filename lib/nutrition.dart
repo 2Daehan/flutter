@@ -1,5 +1,3 @@
-// lib/nutrition.dart
-
 import 'package:flutter/material.dart';
 
 class NutritionPage extends StatefulWidget {
@@ -16,7 +14,6 @@ class _NutritionPageState extends State<NutritionPage> {
 
   final TextEditingController _nutritionController = TextEditingController();
   final TextEditingController _dosageController = TextEditingController();
-  bool _isAddNutritionOpen = false;
 
   void _addNutrition() {
     if (_nutritionController.text.isNotEmpty && _dosageController.text.isNotEmpty) {
@@ -27,7 +24,6 @@ class _NutritionPageState extends State<NutritionPage> {
         ));
         _nutritionController.clear();
         _dosageController.clear();
-        _isAddNutritionOpen = false;
       });
     }
   }
@@ -54,13 +50,14 @@ class _NutritionPageState extends State<NutritionPage> {
           ),
           ElevatedButton(
             onPressed: () {
-              setState(() {
-                _isAddNutritionOpen = true;
-              });
+              // showDialog를 사용해 다이얼로그 열기
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => _buildAddNutritionDialog(),
+              );
             },
             child: Text("영양제 추가"),
           ),
-          if (_isAddNutritionOpen) _buildAddNutritionDialog(),
         ],
       ),
     );

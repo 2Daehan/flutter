@@ -8,7 +8,7 @@ class StaticPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('통계'),
-        backgroundColor: Colors.black,
+
       ),
       body: Center(
         child: Text(
