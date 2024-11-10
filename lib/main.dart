@@ -137,8 +137,8 @@ class _CalendarPageState extends State<CalendarPage> {
               children: [
                 ChecklistPage(), // ChecklistPage 추가
                 NutritionPage(),  // NutritionPage 추가
-                StaticPage(),
-                _buildGoalPage(),
+                StatisticsPage(dateData: _dateData),  // 통계 페이지 사용
+
               ],
             ),
           ),
@@ -164,10 +164,7 @@ class _CalendarPageState extends State<CalendarPage> {
             icon: Icon(Icons.bar_chart),
             label: '통계',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.flag),
-            label: '목표',
-          ),
+
         ],
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
@@ -237,10 +234,5 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  Widget _buildGoalPage() {
-    String goal = _currentData['goal'] ?? '목표 없음';
-    return Center(
-      child: Text('오늘의 목표: $goal'),
-    );
-  }
+
 }

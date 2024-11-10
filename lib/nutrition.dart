@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newproject/static.dart';
 
 class NutritionPage extends StatefulWidget {
   @override
@@ -33,7 +34,7 @@ class _NutritionPageState extends State<NutritionPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('영양제'),
-        backgroundColor: Colors.black,
+
       ),
       body: Column(
         children: [
