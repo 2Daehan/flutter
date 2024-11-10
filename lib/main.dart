@@ -119,8 +119,10 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Life Style'),
-        backgroundColor: Color(0xffB81736),
+
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.green,
+        title: const Text("Life Style", style: TextStyle(fontSize: 22)),
         actions: [
           IconButton(
             icon: Icon(Icons.calendar_today),
