@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'login.dart'; // 로그인 화면 import
+import 'login.dart';
 import 'checklist.dart';
 import 'nutrition.dart';
 import 'static.dart';
@@ -14,8 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        fontFamily: 'Roboto',
+      ),
       home: CalendarPage(),
-      //home: LoginScreen(), // 처음 화면을 로그인 화면으로 설정
     );
   }
 }
@@ -66,36 +70,43 @@ class _CalendarPageState extends State<CalendarPage> {
       context: context,
       builder: (context) {
         return Dialog(
-          child: TableCalendar(
-            focusedDay: _focusedDay,
-            firstDay: DateTime.utc(2020, 1, 1),
-            lastDay: DateTime.utc(2030, 12, 31),
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDay, day);
-            },
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _selectedDay = selectedDay;
-                _focusedDay = focusedDay;
-                _loadDataForSelectedDay(selectedDay);
-              });
-              Navigator.pop(context); // 팝업 닫기
-            },
-            calendarFormat: CalendarFormat.month,
-            headerStyle: HeaderStyle(
-              formatButtonVisible: false,
-              titleCentered: true,
-            ),
-            calendarStyle: CalendarStyle(
-              todayDecoration: BoxDecoration(
-                color: Colors.black12,
-                shape: BoxShape.circle,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TableCalendar(
+              focusedDay: _focusedDay,
+              firstDay: DateTime.utc(2020, 1, 1),
+              lastDay: DateTime.utc(2030, 12, 31),
+              selectedDayPredicate: (day) {
+                return isSameDay(_selectedDay, day);
+              },
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                  _loadDataForSelectedDay(selectedDay);
+                });
+                Navigator.pop(context);
+              },
+              calendarFormat: CalendarFormat.month,
+              headerStyle: HeaderStyle(
+                formatButtonVisible: false,
+                titleCentered: true,
+                titleTextStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              selectedDecoration: BoxDecoration(
-                color: Colors.black,
-                shape: BoxShape.circle,
+              calendarStyle: CalendarStyle(
+                todayDecoration: BoxDecoration(
+                  color: Colors.green.withOpacity(0.3),
+                  shape: BoxShape.circle,
+                ),
+                selectedDecoration: BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
+                outsideDaysVisible: false,
               ),
-              outsideDaysVisible: false,
             ),
           ),
         );
@@ -119,13 +130,12 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
         backgroundColor: Colors.white,
-        foregroundColor: Colors.green,
-        title: const Text("Life Style", style: TextStyle(fontSize: 22)),
+        elevation: 0,
+        title: Text("Life Style", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green)),
         actions: [
           IconButton(
-            icon: Icon(Icons.calendar_today),
+            icon: Icon(Icons.calendar_today, color: Colors.green),
             onPressed: _showCalendarDialog,
           ),
         ],
@@ -137,10 +147,9 @@ class _CalendarPageState extends State<CalendarPage> {
             child: IndexedStack(
               index: _selectedPageIndex,
               children: [
-                ChecklistPage(), // ChecklistPage 추가
-                NutritionPage(),  // NutritionPage 추가
-                StatisticsPage(dateData: _dateData),  // 통계 페이지 사용
-
+                ChecklistPage(),
+                NutritionPage(),
+                StatisticsPage(dateData: _dateData),
               ],
             ),
           ),
@@ -166,75 +175,92 @@ class _CalendarPageState extends State<CalendarPage> {
             icon: Icon(Icons.bar_chart),
             label: '통계',
           ),
-
         ],
-        selectedItemColor: Colors.black,
+        selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }
 
   Widget _buildWeekDates() {
     DateTime startOfWeek = _focusedDay.subtract(Duration(days: _focusedDay.weekday - 1));
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: _previousWeek,
-        ),
-        Expanded(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(7, (index) {
-                DateTime date = startOfWeek.add(Duration(days: index));
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedDay = date;
-                      _loadDataForSelectedDay(date);
-                    });
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 8.5,
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    margin: EdgeInsets.symmetric(horizontal: 5),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: date == _selectedDay ? Colors.blue.withOpacity(0.3) : Colors.transparent,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "${date.month}/${date.day}", // 월/날짜 형식으로 표시
-                          style: TextStyle(
-                            color: date == _selectedDay ? Colors.blue : Colors.black,
-                            fontWeight: date == _selectedDay ? FontWeight.bold : FontWeight.normal,
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            icon: Icon(Icons.arrow_back_ios, size: 18),
+            onPressed: _previousWeek,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(7, (index) {
+                  DateTime date = startOfWeek.add(Duration(days: index));
+                  bool isSelected = date == _selectedDay;
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedDay = date;
+                        _loadDataForSelectedDay(date);
+                      });
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 9,
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        color: isSelected ? Colors.green.withOpacity(0.2) : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${["월", "화", "수", "목", "금", "토", "일"][date.weekday - 1]}",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              color: isSelected ? Colors.green : Colors.grey,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "${["월", "화", "수", "목", "금", "토", "일"][date.weekday - 1]}",
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ],
+                          SizedBox(height: 4),
+                          Text(
+                            "${date.day}",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              color: isSelected ? Colors.green : Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+              ),
             ),
           ),
-        ),
-        IconButton(
-          icon: Icon(Icons.arrow_forward),
-          onPressed: _nextWeek,
-        ),
-      ],
+          IconButton(
+            icon: Icon(Icons.arrow_forward_ios, size: 18),
+            onPressed: _nextWeek,
+          ),
+        ],
+      ),
     );
   }
-
-
 }

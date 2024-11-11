@@ -44,11 +44,25 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('체크리스트'),
+        title: Text('체크리스트', style: TextStyle(color: Colors.black87)),
         backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              '완료된 작업: $completedTasks / ${_tasks.length}',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          LinearProgressIndicator(
+            value: progress,
+            backgroundColor: Colors.grey[200],
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: _tasks.length,
@@ -65,26 +79,35 @@ class _ChecklistPageState extends State<ChecklistPage> {
                   onDismissed: (direction) {
                     _deleteTask(index);
                   },
-                  child: CheckboxListTile(
-                    title: Text(_tasks[index].name),
-                    value: _tasks[index].isCompleted,
-                    onChanged: (bool? value) {
-                      _toggleTaskCompletion(index);
-                    },
+                  child: Card(
+                    elevation: 2,
+                    margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: CheckboxListTile(
+                      title: Text(
+                        _tasks[index].name,
+                        style: TextStyle(
+                          decoration: _tasks[index].isCompleted
+                              ? TextDecoration.lineThrough
+                              : null,
+                        ),
+                      ),
+                      value: _tasks[index].isCompleted,
+                      onChanged: (bool? value) {
+                        _toggleTaskCompletion(index);
+                      },
+                      activeColor: Colors.green,
+                    ),
                   ),
                 );
               },
             ),
           ),
-          LinearProgressIndicator(value: progress),
-          SizedBox(height: 8),
-          ElevatedButton(
-            onPressed: () {
-              _showAddTaskDialog();
-            },
-            child: Text("추가"),
-          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddTaskDialog,
+        child: Icon(Icons.add),
+        backgroundColor: Colors.blue,
       ),
     );
   }
@@ -97,21 +120,24 @@ class _ChecklistPageState extends State<ChecklistPage> {
           title: Text("새 체크리스트 항목 추가"),
           content: TextField(
             controller: _taskController,
-            decoration: InputDecoration(labelText: "할 일 입력"),
+            decoration: InputDecoration(
+              labelText: "할 일 입력",
+              border: OutlineInputBorder(),
+            ),
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                _addTask();
-                Navigator.of(context).pop();
-              },
-              child: Text("추가"),
-            ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
               child: Text("취소"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _addTask();
+                Navigator.of(context).pop();
+              },
+              child: Text("추가"),
             ),
           ],
         );

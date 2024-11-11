@@ -34,7 +34,8 @@ dependencies:
   table_calendar: ^3.1.2
   cupertino_icons: ^1.0.8
   fl_chart: ^0.40.6
-
+  http: ^0.13.5
+  tflite_flutter: ^0.11.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -87,3 +88,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+assets:
+  - assets/completion_rate_model.tflite
